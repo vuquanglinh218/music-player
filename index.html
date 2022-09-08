@@ -36,7 +36,7 @@
       
       <!-- Control -->
       <div class="control">
-        <div class="btn btn--repeat btn--active">
+        <div class="btn btn--repeat">
           <i class="fa-solid fa-repeat"></i>
         </div>
         <div class="btn btn--prev">
@@ -49,7 +49,7 @@
         <div class="btn btn--next">
           <i class="fa-solid fa-forward-step"></i>
         </div>
-        <div class="btn btn--shuffle btn--active">
+        <div class="btn btn--shuffle">
           <i class="fa-solid fa-shuffle"></i>
         </div>
       </div>
@@ -76,10 +76,13 @@
     const playBtn = $('.btn--pause')
     const nextBtn = $('.btn--next')
     const prevBtn = $('.btn--prev')
+    const randomBtn = $('.btn--shuffle')
 
     const app = {
       currentIndex: 0,
       isPlaying: false,
+      isRandom: false,
+
       songs: [
         {
           name: 'Never Be Alone',
@@ -295,14 +298,27 @@
 
         // Xử lý khi next song
         nextBtn.onclick = function(e) {
-          _this.nextSong()
+          if(_this.isRandom) {
+            _this.randomSong()
+          }else {
+            _this.nextSong()
+          }
           audio.play()
         }
 
         // Xử lý khi prev song
         prevBtn.onclick = function(e) {
-          _this.prevSong()
+          if(_this.isRandom) {
+            _this.randomSong()
+          }else {
+            _this.prevSong()
+          }
           audio.play()
+        }
+
+        randomBtn.onclick = function(e) {
+          _this.isRandom = !_this.isRandom
+          e.target.classList.toggle('btn--active', _this.isRandom)
         }
       },
       loadCurrentSong: function() {
@@ -327,6 +343,17 @@
         }
         this.loadCurrentSong()
       },
+
+      randomSong: function() {
+        let newIndex
+        do {
+          newIndex = Math.floor(Math.random() * this.songs.length)
+        }while (newIndex === this.currentIndex)
+
+        this.currentIndex = newIndex
+        this.loadCurrentSong()
+      },
+
       start: function () {
         this.defineProperties()
         this.handleEvents()
