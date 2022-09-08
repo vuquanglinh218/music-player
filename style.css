@@ -214,6 +214,12 @@ body {
   margin: 0px 10px;
   border-radius: 8px;
   box-shadow: 0px 2px 5px #ddd;
+  transition: transform 0.2s linear;
+  cursor: pointer;
+}
+
+.song:active {
+  transform: scale(0.95);
 }
 
 .song--active {
@@ -268,5 +274,6 @@ body {
 .song__option {
   margin: 0px 20px;
   font-size: 20px;
+  padding: 15px 0px;
 }
 
