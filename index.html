@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>music-player</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <div class="player">
+    <!-- Dashboard -->
+    <div class="dashboard">
+      <!-- Header -->
+      <div class="header">
+        <div class="header__btn">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </div>
+        <div class="header--body">
+          <h4>Now playing:</h4>
+          <h2>String 57th & 9th</h2>
+        </div>
+        <div class="header__btn">
+          <i class="fa-sharp fa-solid fa-volume-high"></i>
+        </div>
+      </div>
+      <!-- CD -->
+      <div class="cd">
+        <div class="cd__thumb">
+        </div>
+      </div>
+
+      
+      <input type="range" id="progress" class="progress" value="0" step="0.1" min="0" max="100">
+      
+      <!-- Control -->
+      <div class="control">
+        <div class="btn btn--repeat btn--active">
+          <i class="fa-solid fa-repeat"></i>
+        </div>
+        <div class="btn btn--prev">
+          <i class="fa-solid fa-backward-step"></i>
+        </div>
+        <div class="btn btn--pause">
+          <i class="fa-solid fa-play icon--play"></i>
+          <i class="fa-solid fa-pause icon--pause"></i>
+        </div>
+        <div class="btn btn--next">
+          <i class="fa-solid fa-forward-step"></i>
+        </div>
+        <div class="btn btn--shuffle btn--active">
+          <i class="fa-solid fa-shuffle"></i>
+        </div>
+      </div>
+
+      <audio id="audio" src=""></audio>
+    </div>
+
+    <div class="playlist"></div>
+  </div>
+
+  <script>
+
+
+    const $ = document.querySelector.bind(document)
+    const $$ = document.querySelectorAll.bind(document)
+
+    const player = $('.player')
+    const progress = $('.progress')
+    const body = $('body')
+    const heading = $('.header h2')
+    const cdThumb = $('.cd__thumb')
+    const audio = $('#audio')
+    const cd = $('.cd')
+    const playBtn = $('.btn--pause')
+    const nextBtn = $('.btn--next')
+    const prevBtn = $('.btn--prev')
+
+    const app = {
+      currentIndex: 0,
+      isPlaying: false,
+      songs: [
+        {
+          name: 'Never Be Alone',
+          singer: 'The Fat Rat',
+          path: './assets/music/song1.mp3',
+          image: './assets/image/song1.jpg',
+        },
+        {
+          name: 'Nevada',
+          singer: 'Vicetone, Cozi Zuehlsdorff',
+          path: './assets/music/song2.mp3',
+          image: './assets/image/song2.jpg',
+        },
+        {
+          name: 'Way Back',
+          singer: 'Vicetone, Cozi Zuehlsdorff',
+          path: './assets/music/song3.mp3',
+          image: './assets/image/song3.jpg',
+        },
+        {
+          name: 'The Ocean',
+          singer: 'Mike Perry, Shy Martin',
+          path: './assets/music/song4.mp3',
+          image: './assets/image/song4.jpg',
+        },
+        {
+          name: 'Unity',
+          singer: 'The Fat Rat',
+          path: './assets/music/song5.mp3',
+          image: './assets/image/song5.jpg',
+        },
+        {
+          name: 'End Of The Night',
+          singer: 'Danny Avila',
+          path: './assets/music/song6.mp3',
+          image: './assets/image/song6.jpg',
+        },
+        {
+          name: 'Where Is Your Love',
+          singer: 'J Lisk',
+          path: './assets/music/song7.mp3',
+          image: './assets/image/song7.jpg',
+        },
+        {
+          name: 'Takeaway',
+          singer: 'The Chainsmokers, Illenium, Lennon Stella',
+          path: './assets/music/song8.mp3',
+          image: './assets/image/song8.jpg',
+        },
+        {
+          name: 'Call You Mine',
+          singer: 'The Chainsmokers, Bebe Rexha',
+          path: './assets/music/song9.mp3',
+          image: './assets/image/song9.jpg',
+        },
+        {
+          name: 'All We Know',
+          singer: 'The Chainsmokers, Phoebe Ryan',
+          path: './assets/music/song10.mp3',
+          image: './assets/image/song10.jpg',
+        },
+        {
+          name: 'This Feeling',
+          singer: 'The Chainsmokers, Kelsea Ballerini',
+          path: './assets/music/song11.mp3',
+          image: './assets/image/song11.jpg',
+        },
+        {
+          name: 'So Far Away',
+          singer: 'Martin Garrix, David Guetta, Jamie Scott, V.A',
+          path: './assets/music/song12.mp3',
+          image: './assets/image/song12.jpg',
+        },
+        {
+          name: 'Dreams',
+          singer: 'Pt. II - Lost Sky, Sara Skinner',
+          path: './assets/music/song13.mp3',
+          image: './assets/image/song13.jpg',
+        },
+        {
+          name: 'Light It Up',
+          singer: 'Robin Hustin, Tobimorrow, Jex',
+          path: './assets/music/song14.mp3',
+          image: './assets/image/song14.jpg',
+        },
+        {
+          name: 'Scared To Be Lonely',
+          singer: 'Martin Garrix, Dua Lipa',
+          path: './assets/music/song15.mp3',
+          image: './assets/image/song15.jpg',
+        },
+        {
+          name: 'This Is What You Came For',
+          singer: 'Calvin Harris, Rihanna',
+          path: './assets/music/song16.mp3',
+          image: './assets/image/song16.jpg',
+        },
+        {
+          name: 'Closer',
+          singer: 'The Chainsmokers, Halsey',
+          path: './assets/music/song17.mp3',
+          image: './assets/image/song17.jpg',
+        },
+        {
+          name: 'Symphony',
+          singer: 'Clean Bandit, Zara Larsson',
+          path: './assets/music/song18.mp3',
+          image: './assets/image/song18.jpg',
+        },
+        {
+          name: 'Worth It',
+          singer: 'Fifth Harmony, Kid Ink',
+          path: './assets/music/song19.mp3',
+          image: './assets/image/song19.jpg',
+        },
+        {
+          name: 'Oops',
+          singer: 'Little Mix, Charlie Puth',
+          path: './assets/music/song20.mp3',
+          image: './assets/image/song20.jpg',
+        },
+      ],
+
+      render: function() {
+        const htmls = this.songs.map(song => {
+          return `
+            <div class="song">
+              <div class="song__thumb">
+                <img src="${song.image}" />
+              </div>
+              <div class="song__body">
+                <h3 class="song__body-title">${song.name}</h3>
+                <p class="song__body-author">${song.singer}</p>
+              </div>
+              <div class="song__option">
+                <i class="fa-solid fa-ellipsis"></i>
+              </div>
+            </div>
+          `
+        })
+
+        $('.playlist').innerHTML = htmls.join('')
+      },
+
+      defineProperties: function() {
+        Object.defineProperty(this, 'currentSong', {
+          get: function() {
+            return this.songs[this.currentIndex]
+          }
+        })
+      },
+      handleEvents: function() {
+        const _this = this
+        const cdWidth = cd.offsetWidth
+
+        // Xử lý màu nền cho slider bar và khi tua
+        progress.oninput = function(e) {
+          const seekTime = e.target.value / 100 * audio.duration
+          audio.currentTime = seekTime
+          // e.target.style.setProperty('background', `linear-gradient(to right, #12c2e9 0%, #c471ed, #f64f59 , #f64f59 ${e.target.value}%, #ddd ${e.target.value}%)`)
+          e.target.style.setProperty('background', `linear-gradient(to right, #c471ed, #f64f59 , #f64f59 ${e.target.value}%, #ddd ${e.target.value}%)`)
+        }
+
+        // Xử lý thu nhỏ phóng to CD
+        player.onscroll = function(e) {
+          const scrollTop = e.target.scrollTop
+          const newCdWidth = (cdWidth - scrollTop) < 0 ? 0 : cdWidth - scrollTop
+          cd.style.width = newCdWidth + 'px'
+          cd.style.opacity = newCdWidth / cdWidth
+        }
+
+        // Xử lý quay CD
+        const cdThumbAnimate = cdThumb.animate([
+          { transform: 'rotate(360deg)'}
+        ], {
+          duration: 10000,
+          iterations: Infinity 
+        })
+        cdThumbAnimate.pause()
+
+        // Xử lý khi click play
+        playBtn.onclick = function(e) {
+          if (_this.isPlaying) {
+
+            audio.pause()
+          }
+          else{
+            audio.play()
+          }
+        }
+
+        audio.onplay = function() {
+          _this.isPlaying = true
+            player.classList.add('player--playing')
+            cdThumbAnimate.play()
+        }
+
+        audio.onpause = function() {
+          _this.isPlaying = false
+            player.classList.remove('player--playing')
+            cdThumbAnimate.pause()
+        }
+
+        // Xử lý khi tiến độ bài hát thay đổi
+        audio.ontimeupdate = function(e) {
+          if(e.target.duration) {
+            const progressPercent = e.target.currentTime / e.target.duration * 100
+            // progress.style.setProperty('background', `linear-gradient(to right, #12c2e9 0%, #c471ed, #f64f59 , #f64f59 ${progressPercent}%, #ddd ${progressPercent}%)`)
+            progress.style.setProperty('background', `linear-gradient(to right, #c471ed, #f64f59 , #f64f59 ${progressPercent}%, #ddd ${progressPercent}%)`)
+            progress.value = progressPercent
+          }
+        }
+
+        // Xử lý khi next song
+        nextBtn.onclick = function(e) {
+          _this.nextSong()
+          audio.play()
+        }
+
+        // Xử lý khi prev song
+        prevBtn.onclick = function(e) {
+          _this.prevSong()
+          audio.play()
+        }
+      },
+      loadCurrentSong: function() {
+        heading.textContent = this.currentSong.name
+        cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
+        audio.src = `${this.currentSong.path}`
+      },
+      nextSong: function() {
+        if(this.currentIndex >= this.songs.length) {
+          this.currentIndex = 0
+        }else {
+          this.currentIndex++
+        }
+        this.loadCurrentSong()
+      },
+
+      prevSong: function() {
+        if(this.currentIndex <= 0) {
+          this.currentIndex = this.songs.length
+        }else {
+          this.currentIndex--
+        }
+        this.loadCurrentSong()
+      },
+      start: function () {
+        this.defineProperties()
+        this.handleEvents()
+        this.loadCurrentSong()
+        this.render()
+      }
+    }
+
+    app.start()
+  </script>
+</body>
+</html>
