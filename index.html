@@ -21,8 +21,14 @@
           <h4>Now playing:</h4>
           <h2>String 57th & 9th</h2>
         </div>
-        <div class="header__btn">
+        <div class="header__btn btn--volume">
           <i class="fa-sharp fa-solid fa-volume-high"></i>
+
+          <div class="volume ">
+            <i class="fa-sharp fa-solid fa-volume-high"></i>
+            <input type="range" class="volume__bar" orient="vertical"/>
+            <i class="fa-sharp fa-solid fa-volume-high"></i>
+          </div>
         </div>
       </div>
       <!-- CD -->
@@ -79,6 +85,8 @@
     const prevBtn = $('.btn--prev')
     const randomBtn = $('.btn--shuffle')
     const repeatBtn = $('.btn--repeat')
+    const volumeBtn = $('.btn--volume')
+    const volume = $('.volume')
 
     const app = {
       currentIndex: 0,
@@ -374,6 +382,16 @@
               _this.scrollToActiveSong()
               audio.play()
             }
+          }
+        }
+
+        // Xử lý click vào volume
+        volumeBtn.onclick = function(e) {
+          if(e.target.closest('.volume')) {
+
+          }
+          else{
+            volume.classList.toggle('volume--show')
           }
         }
       },

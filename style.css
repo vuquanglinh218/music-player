@@ -82,6 +82,72 @@ body {
 .header__btn:hover {
   background-color: #eee;
 }
+
+.btn--volume {
+  position: relative;
+}
+
+.volume {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  background-color: white;
+  /* height: 220px; */
+  width: 55px;
+  border-radius: 20px;
+  justify-content: space-around;
+  align-items: center;
+  top: 60px;
+  box-shadow: 2px 2px 8px #ddd;
+  animation: sliderInLeft ease 0.5s;
+}
+
+.volume--show {
+  display: flex;
+}
+
+@keyframes sliderInLeft {
+  0% {
+    display: none;
+    /* transform: translateX(80px); */
+    transform: translate(50%, -50%) scale(0);
+  }
+
+  100% {
+    display: flex;
+    /* transform: translateX(0px); */
+    transform: translate(0%, 0%) scale(1);
+  }
+}
+
+.volume > i {
+  margin: 20px 0px;
+}
+.volume__bar {
+  writing-mode: bt-lr; /* IE */
+  -webkit-appearance: slider-vertical; /* Chromium */
+  width: 8px;
+  height: 120px;
+  padding: 0 5px;
+  background-color: #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.volume__bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 8px;
+  background-color: #f64f59;
+  border-radius: 4px;
+  z-index: 200;
+  transition: transform 0.3s linear;
+}
+
+.volume__bar::-webkit-slider-thumb:hover {
+  transform: scale(1.2)
+}
+
 .cd {
   display: flex;
   margin: auto;
