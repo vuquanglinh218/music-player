@@ -67,6 +67,7 @@
     const $$ = document.querySelectorAll.bind(document)
 
     const player = $('.player')
+    const playlist = $('.playlist')
     const progress = $('.progress')
     const body = $('body')
     const heading = $('.header h2')
@@ -84,6 +85,7 @@
       isPlaying: false,
       isRandom: false,
       isRepeat: false,
+      isScrollCd: true,
 
       songs: [
         {
@@ -239,7 +241,6 @@
       handleEvents: function() {
         const _this = this
         const cdWidth = cd.offsetWidth
-
         // Xử lý màu nền cho slider bar và khi tua
         progress.oninput = function(e) {
           const seekTime = e.target.value / 100 * audio.duration
@@ -249,11 +250,19 @@
         }
 
         // Xử lý thu nhỏ phóng to CD
-        player.onscroll = function(e) {
-          const scrollTop = e.target.scrollTop
-          const newCdWidth = (cdWidth - scrollTop) < 0 ? 0 : cdWidth - scrollTop
-          cd.style.width = newCdWidth + 'px'
-          cd.style.opacity = newCdWidth / cdWidth
+
+        playlist.onscroll = function(e) {
+          if (_this.isScrollCd) {
+            if (cd.offsetWidth > 0 && e.target.scrollTop > 200) {
+              cd.style.width = cd.offsetWidth < 20? '0px' : (cd.offsetWidth  - 20) + 'px'
+              console.log('scroll up')
+            }
+            if (e.target.scrollTop <= 200) {
+              console.log('scroll down')
+              cd.style.width = (200  - e.target.scrollTop) < 20? '0px': (200  - e.target.scrollTop) + 'px'
+            }
+          }
+          console.log(cd.offsetWidth)
         }
 
         // Xử lý quay CD
@@ -347,11 +356,12 @@
               }
               audio.play()
               _this.render()
+              _this.scrollToActiveSong()
             }, 1000)
           }
         }
 
-
+        // Xử lý click vào song
         player.onclick = function(e) {
           const songNode = e.target.closest('.song:not(.song--active)')
           if (songNode || e.target.closest('.song__option')) {
@@ -369,7 +379,8 @@
       },
 
       scrollToActiveSong: function() {
-        setTimeout(function() {
+        this.isScrollCd = false
+        cd.style.width = "200px"
           $('.song--active').scrollIntoView(
             {
               block: 'center',
@@ -377,7 +388,9 @@
               behavior: 'smooth'
             }
           )
-        }, 200)
+          setTimeout(function() {
+            app.isScrollCd = true
+          }, 500)
       },
 
       loadCurrentSong: function() {

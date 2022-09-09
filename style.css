@@ -23,14 +23,15 @@ body {
 .player {
   position: relative;
   width: 390px;
-  min-height: 600px;
-  max-height: 844px;
+  height: 844px;
   background-color: #fff;
   box-shadow: 2px 4px 20px #111;
   border-radius: 20px;
   background-color: #efefef;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .player::-webkit-scrollbar {
@@ -38,11 +39,13 @@ body {
 }
 
 .dashboard {
+  display: flex;
+  flex-direction: column;
   width: inherit;
   background-color: #fff;
   border-radius: 20px;
-  /* padding-bottom: 30px; */
-  position: fixed;
+  /* padding-bottom: 10px; */
+  /* position: fixed; */
   box-shadow: 0px 1px 5px #999;
 }
 
@@ -202,7 +205,12 @@ body {
 }
 
 .playlist {
-  margin-top: 450px;
+  overflow: hidden scroll;
+  flex-grow: 1;
+}
+
+.playlist::-webkit-scrollbar {
+  display: none;
 }
 
 .song {
@@ -216,6 +224,7 @@ body {
   box-shadow: 0px 2px 5px #ddd;
   transition: transform 0.2s linear;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .song:active {
