@@ -263,11 +263,13 @@
           if (_this.isScrollCd) {
             if (cd.offsetWidth > 0 && e.target.scrollTop > 200) {
               cd.style.width = cd.offsetWidth < 20? '0px' : (cd.offsetWidth  - 20) + 'px'
+              cd.style.opacity = cd.offsetWidth / 200
               console.log('scroll up')
             }
             if (e.target.scrollTop <= 200) {
-              console.log('scroll down')
               cd.style.width = (200  - e.target.scrollTop) < 20? '0px': (200  - e.target.scrollTop) + 'px'
+              cd.style.opacity = cd.offsetWidth / 200
+              console.log('scroll down')
             }
           }
           console.log(cd.offsetWidth)
@@ -398,6 +400,7 @@
 
       scrollToActiveSong: function() {
         this.isScrollCd = false
+        cd.style.opacity = 1
         cd.style.width = "200px"
           $('.song--active').scrollIntoView(
             {
